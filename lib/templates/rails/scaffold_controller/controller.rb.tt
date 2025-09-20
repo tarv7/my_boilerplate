@@ -1,0 +1,75 @@
+<% module_namespacing do -%>
+class <%= controller_class_name %>Controller < ApplicationController
+  before_action :set_<%= singular_table_name %>, only: %i[ show edit update destroy ]
+
+  def index
+    @<%= plural_table_name %> = apply_filters(<%= class_name %>.all)
+  end
+
+  def show
+  end
+
+  def new
+    @<%= singular_table_name %> = <%= orm_class.build(class_name) %>
+  end
+
+  def edit
+  end
+
+  def create
+    @<%= singular_table_name %> = <%= orm_class.build(class_name, "#{singular_table_name}_params") %>
+
+    if @<%= orm_instance.save %>
+      redirect_to <%= redirect_resource_name %>, notice: <%= %("#{human_name} was successfully created.") %>
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if @<%= orm_instance.update("#{singular_table_name}_params") %>
+      redirect_to <%= redirect_resource_name %>, notice: <%= %("#{human_name} was successfully updated.") %>, status: :see_other
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @<%= orm_instance.destroy %>
+    redirect_to <%= index_helper %>_path, notice: <%= %("#{human_name} was successfully destroyed.") %>, status: :see_other
+  end
+
+  private
+
+  def set_<%= singular_table_name %>
+    @<%= singular_table_name %> = <%= orm_class.find(class_name, "params.expect(:id)") %>
+  end
+
+  def <%= "#{singular_table_name}_params" %>
+    <%- if attributes_names.empty? -%>
+    params.fetch(:<%= singular_table_name %>, {})
+    <%- else -%>
+    params.expect(<%= singular_table_name %>: [ <%= permitted_params %> ])
+    <%- end -%>
+  end
+
+  def apply_filters(scope)
+<%- attributes.reject { |attr| %w[id updated_at].include?(attr.name) }.each do |attribute| -%>
+  <%- case attribute.type -%>
+  <%- when :boolean -%>
+    scope = scope.where(<%= attribute.name %>: params[:<%= attribute.name %>] == "true") if params[:<%= attribute.name %>].present?
+  <%- when :string, :text -%>
+    scope = scope.where("<%= attribute.name %> ILIKE ?", "%#{params[:<%= attribute.name %>]}%") if params[:<%= attribute.name %>].present?
+  <%- when :integer, :decimal, :float -%>
+    scope = scope.where(<%= attribute.name %>: params[:<%= attribute.name %>_min].presence..params[:<%= attribute.name %>_max].presence) if params[:<%= attribute.name %>_min].present? || params[:<%= attribute.name %>_max].present?
+  <%- when :date, :datetime, :timestamp -%>
+    scope = scope.where(<%= attribute.name %>: params[:<%= attribute.name %>_from].presence..params[:<%= attribute.name %>_to].presence) if params[:<%= attribute.name %>_from].present? || params[:<%= attribute.name %>_to].present?
+  <%- else -%>
+    scope = scope.where("<%= attribute.name %> ILIKE ?", "%#{params[:<%= attribute.name %>]}%") if params[:<%= attribute.name %>].present?
+  <%- end -%>
+<%- end -%>
+
+    scope
+  end
+end
+<% end -%>
