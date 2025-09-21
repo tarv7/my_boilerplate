@@ -3,7 +3,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   before_action :set_<%= singular_table_name %>, only: %i[ show edit update destroy ]
 
   def index
-    @<%= plural_table_name %> = apply_filters(<%= class_name %>.all)
+    @<%= plural_table_name %> = <%= class_name %>::Filter.new(params).call
   end
 
   def show
@@ -51,25 +51,6 @@ class <%= controller_class_name %>Controller < ApplicationController
     <%- else -%>
     params.expect(<%= singular_table_name %>: [ <%= permitted_params %> ])
     <%- end -%>
-  end
-
-  def apply_filters(scope)
-<%- attributes.reject { |attr| %w[id updated_at].include?(attr.name) }.each do |attribute| -%>
-  <%- case attribute.type -%>
-  <%- when :boolean -%>
-    scope = scope.where(<%= attribute.name %>: params[:<%= attribute.name %>] == "true") if params[:<%= attribute.name %>].present?
-  <%- when :string, :text -%>
-    scope = scope.where("<%= attribute.name %> ILIKE ?", "%#{params[:<%= attribute.name %>]}%") if params[:<%= attribute.name %>].present?
-  <%- when :integer, :decimal, :float -%>
-    scope = scope.where(<%= attribute.name %>: params[:<%= attribute.name %>_min].presence..params[:<%= attribute.name %>_max].presence) if params[:<%= attribute.name %>_min].present? || params[:<%= attribute.name %>_max].present?
-  <%- when :date, :datetime, :timestamp -%>
-    scope = scope.where(<%= attribute.name %>: params[:<%= attribute.name %>_from].presence..params[:<%= attribute.name %>_to].presence) if params[:<%= attribute.name %>_from].present? || params[:<%= attribute.name %>_to].present?
-  <%- else -%>
-    scope = scope.where("<%= attribute.name %> ILIKE ?", "%#{params[:<%= attribute.name %>]}%") if params[:<%= attribute.name %>].present?
-  <%- end -%>
-<%- end -%>
-
-    scope
   end
 end
 <% end -%>
