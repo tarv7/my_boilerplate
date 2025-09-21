@@ -1,0 +1,71 @@
+en:
+  <%= plural_table_name %>:
+    index:
+      title: "<%= human_name.pluralize %>"
+      description: "Manage and organize your <%= human_name.downcase.pluralize %> efficiently"
+      new_button: "New <%= human_name %>"
+      filters:
+        title: "Filters"
+        clear_all: "Clear All"
+        all: "All"
+        yes_: "Yes"
+        no_: "No"
+        search_placeholder: "Search %{attribute}..."
+        from_date: "From date"
+        to_date: "To date"
+        min_value: "Min value"
+        max_value: "Max value"
+        created_date: "Created Date"
+        apply: "Apply Filters"
+        reset: "Reset"
+        active_count:
+          one: "%{count} filter active"
+          other: "%{count} filters active"
+      stats:
+        total_records: "Total Records"
+        last_updated: "Last updated"
+      table:
+        created: "Created"
+        actions: "Actions"
+        yes_: "Yes"
+        no_: "No"
+        view_tooltip: "View <%= human_name.downcase %>"
+        edit_tooltip: "Edit <%= human_name.downcase %>"
+        delete_tooltip: "Delete <%= human_name.downcase %>"
+        delete_confirm: "⚠️ Delete this <%= human_name.downcase %>?\n\nThis action cannot be undone. Are you sure you want to proceed?"
+      empty_state:
+        title: "No <%= human_name.pluralize %> Found"
+        description: "Ready to get started? Create your first <%= human_name.downcase %> and begin managing your content."
+        create_first: "Create First <%= human_name %>"
+    show:
+      title: "<%= human_name %> Details"
+      description: "View and manage this <%= human_name.downcase %> information"
+      back_to_item: "Back to <%= human_name %>"
+      back_to_list: "All <%= human_name.pluralize %>"
+      edit_button: "Edit <%= human_name %>"
+      delete_button: "Delete <%= human_name %>"
+      delete_confirm: "⚠️ Delete this <%= human_name.downcase %>?\n\nThis action cannot be undone. Are you sure you want to proceed?"
+      not_specified: "Not specified"
+      table:
+        yes_: "Yes"
+        no_: "No"
+    new:
+      title: "Create New <%= human_name %>"
+      description: "Fill out the form below to create a new <%= human_name.downcase %>"
+      form_title: "<%= human_name %> Details"
+      back_to_list: "Back to <%= human_name.pluralize %>"
+    edit:
+      title: "Edit <%= human_name %>"
+      description: "Update the information for this <%= human_name.downcase %>"
+      form_title: "Update <%= human_name %> Information"
+      back_to_item: "Back to <%= human_name %>"
+      back_to_list: "All <%= human_name.pluralize %>"
+    form:
+      create_button: "Create <%= human_name %>"
+      update_button: "Update <%= human_name %>"
+      required_fields: "* Required fields"
+      placeholders:
+        enter: "Enter %{attribute}..."
+        search: "Search %{attribute}..."
+        confirm_password: "Confirm password"
+        enter_password: "Enter password"
