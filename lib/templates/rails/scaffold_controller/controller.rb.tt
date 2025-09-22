@@ -1,9 +1,17 @@
 <% module_namespacing do -%>
 class <%= controller_class_name %>Controller < ApplicationController
+  <%= class_name.upcase %>_SORT_PARAMS = {
+<%- (attributes + [ Rails::Generators::GeneratedAttribute.new("created_at", "datetime") ]).each do |attribute| -%>
+    <%= attribute.name %>: "<%= class_name.downcase.pluralize %>.<%= attribute.name %>"<%= "," if attribute.name != "created_at" %>
+<%- end -%>
+  }.freeze
+
+  include SortParams
+
   before_action :set_<%= singular_table_name %>, only: %i[ show edit update destroy ]
 
   def index
-    @<%= plural_table_name %> = <%= class_name %>::Filter.new(params).call
+    @<%= plural_table_name %> = <%= class_name %>::Filter.new(params).call.order(sort_condition)
   end
 
   def show
@@ -51,6 +59,10 @@ class <%= controller_class_name %>Controller < ApplicationController
     <%- else -%>
     params.expect(<%= singular_table_name %>: [ <%= permitted_params %> ])
     <%- end -%>
+  end
+
+  def sort_condition
+    define_sort_params(<%= class_name.upcase %>_SORT_PARAMS, "<%= class_name.downcase.pluralize %>.")
   end
 end
 <% end -%>
