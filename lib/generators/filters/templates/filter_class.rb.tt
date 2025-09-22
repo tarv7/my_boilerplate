@@ -17,7 +17,7 @@ class <%= class_name %>::Filter
 <%- (attributes + [ Rails::Generators::GeneratedAttribute.new("created_at", "datetime") ]).each do |attribute| -%>
 
   def filter_by_<%= attribute.name %>(scope)
-  <%- case attribute.type -%>
+  <%- case attribute.type.to_sym -%>
   <%- when :boolean -%>
     return scope if params[:<%= attribute.name %>].blank?
 
@@ -33,7 +33,10 @@ class <%= class_name %>::Filter
   <%- when :date, :datetime, :timestamp -%>
     return scope if params[:<%= attribute.name %>_from].blank? && params[:<%= attribute.name %>_to].blank?
 
-    scope.where(<%= attribute.name %>: params[:<%= attribute.name %>_from].presence..params[:<%= attribute.name %>_to].presence)
+    from_date = params[:<%= attribute.name %>_from].presence
+    to_date = params[:<%= attribute.name %>_to].presence&.to_datetime&.end_of_day
+
+    scope.where(<%= attribute.name %>: from_date..to_date)
   <%- else -%>
     return scope if params[:<%= attribute.name %>].blank?
 
