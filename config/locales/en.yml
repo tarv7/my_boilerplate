@@ -29,3 +29,12 @@
 
 en:
   hello: "Hello world"
+
+  # Shared pagination translations
+  pagination:
+    previous: "Previous"
+    next: "Next"
+    showing: "Showing"
+    to: "to"
+    of: "of"
+    results: "results"

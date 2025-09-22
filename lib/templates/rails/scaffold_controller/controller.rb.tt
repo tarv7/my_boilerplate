@@ -1,5 +1,6 @@
 <% module_namespacing do -%>
 class <%= controller_class_name %>Controller < ApplicationController
+  PER_PAGE = 10.freeze
   <%= class_name.upcase %>_SORT_PARAMS = {
 <%- (attributes + [ Rails::Generators::GeneratedAttribute.new("created_at", "datetime") ]).each do |attribute| -%>
     <%= attribute.name %>: "<%= class_name.downcase.pluralize %>.<%= attribute.name %>"<%= "," if attribute.name != "created_at" %>
@@ -11,7 +12,10 @@ class <%= controller_class_name %>Controller < ApplicationController
   before_action :set_<%= singular_table_name %>, only: %i[ show edit update destroy ]
 
   def index
-    @<%= plural_table_name %> = <%= class_name %>::Filter.new(params).call.order(sort_condition)
+    @<%= plural_table_name %> = <%= class_name %>::Filter.new(params)
+      .call
+      .order(sort_condition)
+      .page(params[:page]).per(PER_PAGE)
   end
 
   def show
