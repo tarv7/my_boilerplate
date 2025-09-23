@@ -1,0 +1,19 @@
+en:
+  shared:
+    filter_section:
+      title: "Filters"
+      clear_all: "Clear All"
+      all: "All"
+      yes_: "Yes"
+      no_: "No"
+      search_placeholder: "Search %{attribute}..."
+      from_date: "From date"
+      to_date: "To date"
+      min_value: "Min value"
+      max_value: "Max value"
+      created_date: "Created Date"
+      apply: "Apply Filters"
+      reset: "Reset"
+      active_count:
+        one: "%{count} filter active"
+        other: "%{count} filters active"

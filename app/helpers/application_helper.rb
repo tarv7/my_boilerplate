@@ -16,4 +16,8 @@ module ApplicationHelper
   def sort_params(attribute)
     params.except(:controller, :action).permit!.to_h.merge(sort: attribute, direction: next_direction(attribute))
   end
+
+  def active_filters(model)
+    params.permit!.to_h.select { |k, v| model.attribute_names.include?(k.to_s) }.compact
+  end
 end
