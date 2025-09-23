@@ -1,0 +1,6 @@
+en:
+  shared:
+    table_empty_state:
+      title: "No %{resource_name} Found"
+      description: "Ready to get started? Create your first %{resource_name} and begin managing your content."
+      create_first: "Create First %{resource_name}"

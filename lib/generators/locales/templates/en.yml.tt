@@ -16,10 +16,6 @@ en:
         edit_tooltip: "Edit <%= human_name.downcase %>"
         delete_tooltip: "Delete <%= human_name.downcase %>"
         delete_confirm: "⚠️ Delete this <%= human_name.downcase %>?\n\nThis action cannot be undone. Are you sure you want to proceed?"
-      empty_state:
-        title: "No <%= human_name.pluralize %> Found"
-        description: "Ready to get started? Create your first <%= human_name.downcase %> and begin managing your content."
-        create_first: "Create First <%= human_name %>"
     show:
       title: "<%= human_name %> Details"
       description: "View and manage this <%= human_name.downcase %> information"
