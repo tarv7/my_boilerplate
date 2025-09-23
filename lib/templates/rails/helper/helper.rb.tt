@@ -1,0 +1,11 @@
+<% module_namespacing do -%>
+module <%= class_name %>Helper
+  def <%= singular_table_name %>_filter_fields
+    <%= class_name.singularize %>.attribute_names - %w[id updated_at]
+  end
+
+  def <%= singular_table_name %>_table_columns
+    <%= class_name.singularize %>.attribute_names - %w[updated_at]
+  end
+end
+<% end -%>

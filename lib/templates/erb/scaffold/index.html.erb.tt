@@ -189,23 +189,13 @@
           <thead class="bg-slate-50 dark:bg-slate-700/50">
             <tr>
               <%% # Generate dynamic columns based on model attributes %>
-              <%% <%= class_name %>.attribute_names.reject { |attr| %w[id updated_at].include?(attr) }.each do |attribute| %>
+              <%% <%= singular_table_name %>_table_columns.each do |attribute| %>
                 <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider border-b border-slate-200 dark:border-slate-600">
-                  <%%
-                    # Determine sort direction for this column
-                    current_sort = params[:sort] == attribute.to_s
-                    current_direction = params[:direction] == 'desc' ? 'desc' : 'asc'
-                    next_direction = current_sort && current_direction == 'asc' ? 'desc' : 'asc'
-
-                    # Build sort URL parameters, preserving existing filters
-                    sort_params = params.except(:controller, :action).permit!.to_h.merge(sort: attribute, direction: next_direction)
-                  %>
-
-                  <%%= link_to <%= plural_table_name %>_path(sort_params),
+                  <%%= link_to <%= plural_table_name %>_path(sort_params(attribute)),
                         class: "group inline-flex items-center gap-2 hover:text-slate-800 dark:hover:text-slate-100 transition-colors duration-200" do %>
                     <%%= attribute == 'created_at' ? t('.table.created') : attribute.humanize %>
 
-                    <%% if current_sort %>
+                    <%% if current_sort?(attribute) %>
                       <%% if current_direction == 'asc' %>
                         <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
@@ -235,7 +225,7 @@
               <tr class="group hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors duration-200">
 
                 <%% # Generate dynamic data cells %>
-                <%% <%= class_name %>.attribute_names.reject { |attr| %w[id updated_at].include?(attr) }.each do |attribute| %>
+                <%% <%= singular_table_name %>_table_columns.each do |attribute| %>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <%% value = <%= singular_table_name %>.send(attribute) %>
                     <%% column = <%= class_name %>.columns_hash[attribute] %>
